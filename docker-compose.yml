@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: southwest-price-drop-bot
     command: ["npm", "run", "start"]
     env_file: .env
     ports:
@@ -23,9 +24,7 @@ services:
   nodescheduler:
     container_name: southwest_check
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: southwest-price-drop-bot
     command: ["/home/app/check-loop.sh"]
     env_file: .env
     links:
@@ -34,7 +33,8 @@ services:
       mongodb:
         condition: service_healthy
     environment:
-      WAIT_HOSTS: mongodb:27017
+      - WAIT_HOSTS=mongodb:27017
+      - CHECK_WAIT=60m
     networks:
       - node-sw-bot-network
 
