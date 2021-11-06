@@ -127,6 +127,34 @@ DEBUG="puppeteer:*" CHROME_DEBUG=true node tasks/check.js
 This will send helpful chromium debugging output into your console, and enable some additional
 logging to help debug what might be going wrong.
 
+## Docker
+
+There are 3 containers in the docker setup:
+
+ - **mongo** - container running mongodb 
+ - **nodeapp** - container running the frontend
+ - **nodescheduler** - container running the check every 60 minutes 
+
+To run via docker-compose:
+
+Create your .env file from the example. Set the mongo DB url like:
+
+```
+MONGODB_URI="mongodb://mongodb:27017/sw_db"
+```
+
+Then you can start up the docker instance.
+
+```
+docker-compose build
+```
+
+```
+docker-compose up -d
+```
+
+The interface will be available on http://\<*dockerhost*\>:3000
+
 ## Version history
 
 ### [3.5.0] - 2019-08-11
