@@ -157,6 +157,8 @@ The interface will be available on http://\<*dockerhost*\>:3000
 
 ## Version history
 
+### [3.6.0] - 2021-11-05
+  - Add Docker / Docker-Compose configuration
 ### [3.5.0] - 2019-08-11
   - Update dependencies, including yarn.lock
   - Update to Node v12
