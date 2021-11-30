@@ -28,5 +28,4 @@ services:
     command: ["sh ./check-loop.sh"]
     env_file: .env
     environment:
-      - CHECK_WAIT=60m
       - CHROME_EXECUTABLE=/usr/bin/chromium
