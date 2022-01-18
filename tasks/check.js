@@ -12,6 +12,7 @@ const Semaphore = require('semaphore-async-await').default;
 
 (async () => {
   const browser = await createBrowser();
+  console.log('Browser PID from check is: ' + browser.process().pid);
 
   try {
     const alerts = await Alert.allActiveAlerts();
@@ -33,10 +34,12 @@ const Semaphore = require('semaphore-async-await').default;
 
         // get current price
         await alert.getLatestPrice(browser, lock);
+        console.debug ('Saving alert after getting latest price');
         alert.save();
 
         // send message if cheaper
         const less = alert.price - alert.latestPrice;
+	console.debug ('Price savings: ' + less);
         if (less > 0) {
           console.log(`${flight} dropped ${alert.formattedPriceDifference} to ${alert.formattedLatestPrice}`);
 
@@ -72,7 +75,11 @@ const Semaphore = require('semaphore-async-await').default;
     await Promise.all(promises);
   } catch (e) {
     console.error(e);
+    await browser.close();
+    if (browser && browser.process() != null) browser.process().kill('SIGINT');
   } finally {
+    await browser.close();
+    if (browser && browser.process() != null) browser.process().kill('SIGINT');
     process.exit();
   }
 })();
