@@ -8,7 +8,6 @@ services:
       dockerfile: Dockerfile
     image: southwest-price-drop-bot
     command: ["npm", "run", "start"]
-    env_file: .env
     ports:
       - "3000:3000"
     links:
@@ -18,15 +17,17 @@ services:
         condition: service_healthy
     environment:
       WAIT_HOSTS: mongodb:27017
+    env_file: stack.env
     networks:
       - node-sw-bot-network
+      - web
 
   nodescheduler:
     container_name: southwest_check
     restart: always
     image: southwest-price-drop-bot
     command: ["/home/app/check-loop.sh"]
-    env_file: .env
+    env_file: stack.env
     links:
       - mongodb
     depends_on:
@@ -34,18 +35,14 @@ services:
         condition: service_healthy
     environment:
       - WAIT_HOSTS=mongodb:27017
-      - CHECK_WAIT=60m
     networks:
       - node-sw-bot-network
 
   mongodb:
     container_name: mongodb
     image: mongo
-    environment:
-      - PGID=1000
-      - PUID=1000
     volumes:
-      - ./_docker/mongodb:/data/db:Z
+      - /mnt/main/config/southwest:/data/db:Z
     ports:
       - "27017:27017"
     healthcheck:
@@ -54,9 +51,12 @@ services:
       timeout: 10s
       retries: 12
     restart: unless-stopped
+    env_file: stack.env
     networks:
       - node-sw-bot-network
 
 networks:
   node-sw-bot-network:
     driver: bridge
+  web:
+    external: true

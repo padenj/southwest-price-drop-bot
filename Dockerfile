@@ -8,6 +8,8 @@ WORKDIR /home/app
 ADD . /home/app
 
 RUN yarn install --frozen-lockfile --production
+RUN ["chmod", "+x", "/home/app/entrypoint.sh"]
+RUN ["chmod", "+x", "/home/app/check-loop.sh"]
 
 EXPOSE 3000
 
