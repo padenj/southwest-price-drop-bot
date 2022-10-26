@@ -16,7 +16,8 @@ services:
       mongodb:
         condition: service_healthy
     environment:
-      WAIT_HOSTS: mongodb:27017
+      - WAIT_HOSTS: mongodb:27017
+      - VIRTUAL_PORT: 3000
     env_file: stack.env
     labels:
       com.centurylinklabs.watchtower.enable: false
